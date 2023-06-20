@@ -1,0 +1,15 @@
+---
+- name: "Install Hacks"
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: "Demo"
+      debug:
+        msg: "hello world"
+    - name: "Install git"
+      package: 
+        name: git
+        state: present
+  roles:
+    - role: "roles/config-tmux"
+    - role: "roles/zsh-config"

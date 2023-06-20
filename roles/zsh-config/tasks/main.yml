@@ -1,0 +1,45 @@
+---
+- name: "Install Zsh and Oh My Zsh"
+  package:
+    name: zsh
+    state: present
+
+- name: "Install Curl"
+  package: 
+    name: curl
+    state: present
+
+- name: "Set default shell to Zsh" 
+  shell: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+  args: 
+    creates: /home/willi/.oh-my-zsh
+
+- name: Insert .zshrc file
+  copy: 
+    src: "{{ role_path }}/files/.zshrc"
+    dest: "/home/willi/.zshrc"
+
+# IDK if the fonts are working
+
+- name: Create .fonts directory if it doesn't exist
+  file:
+    path: "{{ ansible_user_dir }}/.fonts"
+    state: directory
+
+- name: Download PowerlineSymbols.otf font file
+  get_url:
+    url: https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+    dest: "{{ ansible_user_dir }}/.fonts/PowerlineSymbols.otf"
+
+- name: Create fontconfig directory if it doesn't exist
+  file:
+    path: "{{ ansible_user_dir }}/.config/fontconfig/conf.d"
+    state: directory
+
+- name: Download 10-powerline-symbols.conf file
+  get_url:
+    url: https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
+    dest: "{{ ansible_user_dir }}/.config/fontconfig/conf.d/10-powerline-symbols.conf"
+
+
+

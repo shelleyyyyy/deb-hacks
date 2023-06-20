@@ -1,0 +1,24 @@
+---
+- name: "Install TMUX"
+  package:
+    name: tmux
+    state: present
+  
+- name: Clone .tmux repository
+  git:
+    repo: https://github.com/gpakosz/.tmux.git
+    dest: "{{ ansible_user_dir }}/.tmux"
+    version: master
+
+- name: Create symbolic link for .tmux.conf
+  file:
+    src: "{{ ansible_user_dir }}/.tmux/.tmux.conf"
+    dest: "{{ ansible_user_dir }}/.tmux.conf"
+    state: link
+    force: yes
+
+- name: Copy .tmux.conf.local
+  copy:
+    src: "{{ ansible_user_dir }}/.tmux/.tmux.conf.local"
+    dest: "{{ ansible_user_dir }}/.tmux.conf.local"
+    remote_src: yes
