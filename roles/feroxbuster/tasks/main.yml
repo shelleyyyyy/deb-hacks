@@ -1,0 +1,32 @@
+---
+# tasks file for feroxbuster
+
+- name: Update package cache
+  become: yes
+  package:
+    name: '*'
+    state: latest
+
+- name: Download Feroxbuster binary
+  become: yes
+  shell: |
+    curl -LO https://github.com/epi052/feroxbuster/releases/latest/download/feroxbuster-linux-amd64
+    chmod +x feroxbuster-linux-amd64
+    mv feroxbuster-linux-amd64 /usr/local/bin/feroxbuster
+
+- name: Verify Feroxbuster installation
+  become: yes
+  command: feroxbuster --version
+  register: feroxbuster_output
+  changed_when: false
+  failed_when: "'Feroxbuster' not in feroxbuster_output.stdout"
+
+- name: Add Feroxbuster to PATH
+  become: yes
+  lineinfile:
+    dest: "{{ ansible_user_dir }}/.bashrc"
+    line: 'export PATH="$PATH:/usr/local/bin"'
+    state: present
+    create: yes
+    insertafter: EOF
+  when: feroxbuster_output is succeeded

@@ -9,15 +9,21 @@
     name: curl
     state: present
 
-- name: "Set default shell to Zsh" 
+- name: "Install Oh My Zsh" 
   shell: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
   args: 
-    creates: /home/willi/.oh-my-zsh
+    creates: "{{ ansible_user_dir }}/.oh-my-zsh"
 
 - name: Insert .zshrc file
   copy: 
     src: "{{ role_path }}/files/.zshrc"
-    dest: "/home/willi/.zshrc"
+    dest: "{{ ansible_user_dir }}/.zshrc"
+
+- name: Set Zsh to Default Shell
+  copy: 
+    src: "{{ role_path }}/files/.bashrc"
+    dest: "{{ ansible_user_dir }}/.bashrc"
+    
 
 # IDK if the fonts are working
 

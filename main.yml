@@ -13,3 +13,6 @@
   roles:
     - role: "roles/config-tmux"
     - role: "roles/zsh-config"
+    - role: "roles/deps"
+    - role: "roles/nmap"
+    - role: "roles/feroxbuster"
